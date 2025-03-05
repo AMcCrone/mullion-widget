@@ -277,13 +277,14 @@ def generate_figure():
         colors = cm.RdYlGn_r(norm(depths_3d))
     else:
         colors = 'blue'
-    
+    # Compute recommended profile: choose section with minimum depth and, if multiples, the one with the highest utilisation (largest marker size)
     recommended_text = "No suitable profile - choose a custom one!"
     if len(depths_3d) > 0:
         min_depth = min(depths_3d)
         indices = [i for i, d in enumerate(depths_3d) if d == min_depth]
         if indices:
-            rec_index = indices[0] if len(indices) == 1 else indices[np.argmax(np.sqrt(np.array(uls_util)**2 + np.array(sls_util)[indices]))]
+            d_array = np.sqrt(np.array(uls_util)**2 + np.array(sls_util)**2)
+            rec_index = indices[0] if len(indices) == 1 else indices[np.argmax(d_array[indices])]
             recommended_text = f"Recommended Profile: {safe_suppliers[rec_index]}: {safe_profiles[rec_index]}"
     
     ax_3d.clear()
