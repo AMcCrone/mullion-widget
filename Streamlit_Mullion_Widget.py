@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -33,19 +34,15 @@ st.sidebar.header("Settings")
 # 1. Material Selection
 plot_material = st.sidebar.selectbox("Select Material", options=["Steel", "Aluminium"], index=0)
 
-# 2. Upload Excel Database
-st.sidebar.subheader("Upload Cross Sections Database")
-uploaded_file = st.sidebar.file_uploader("Choose an Excel file", type=["xlsx"])
+# 2. Read the Excel file from the repository using a relative path.
+BASE_DIR = os.path.dirname(__file__)
+file_path = os.path.join(BASE_DIR, "Cross_Sections_Database.xlsx")
+SHEET = "Alu Mullion Database" if plot_material == "Aluminium" else "Steel Mullion Database"
 
-if uploaded_file is not None:
-    try:
-        SHEET = "Alu Mullion Database" if plot_material == "Aluminium" else "Steel Mullion Database"
-        df = pd.read_excel(uploaded_file, sheet_name=SHEET, engine="openpyxl")
-    except Exception as e:
-        st.error(f"Error reading the Excel file: {e}")
-        st.stop()
-else:
-    st.info("Please upload the Cross Sections Database Excel file.")
+try:
+    df = pd.read_excel(file_path, sheet_name=SHEET, engine="openpyxl")
+except Exception as e:
+    st.error(f"Error reading the Excel file from the repository: {e}")
     st.stop()
 
 # 3. Process the DataFrame
