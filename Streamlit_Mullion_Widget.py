@@ -24,7 +24,7 @@ TT_Grey = (0.38824, 0.4, 0.41176)
 # Streamlit Page Setup
 # ---------------------------
 st.set_page_config(page_title="Section Design Tool", layout="wide")
-st.title("Section Design Tool")
+st.title("Mullion Design Widget")
 
 # ---------------------------
 # Sidebar Controls
